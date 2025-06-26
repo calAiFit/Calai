@@ -23,7 +23,7 @@ export default function ShopPage() {
       image: "/protien.jpeg",
       category: "Equipment",
       rating: 4.8,
-      reviews: 87,
+      reviews: 8793487,
     },
     {
       id: 3,

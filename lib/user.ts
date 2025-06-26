@@ -13,7 +13,7 @@ const schemaUser = z.object({
   name: z.string().min(1),
 });
 
-export const createUser = async (formData: FormData) => {
+export const createUser = async (formData : FormData) => {
   try {
     const rawData = {
       email: formData.get("email"),

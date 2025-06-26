@@ -30,7 +30,7 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-sm">
+          <div className="bg-white rounded-2xl shadow-md">
             <BMICalculator />
           </div>
 
