@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "../components/Navbar";
+
 import FoodNutritionAnalyzer from "../components/FoodNutritionAnalyzer";
 
 export default function CaloriePage() {
@@ -43,6 +43,17 @@ export default function CaloriePage() {
     setCalories(totalCalories.toString());
     setLoading(false);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="space-y-4 text-center">
+          <div className="animate-spin h-12 w-12 border-4 border-purple-500 border-t-transparent rounded-full"></div>
+          <p className="text-gray-600">Calculating your daily needs...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">

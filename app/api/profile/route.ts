@@ -1,44 +1,22 @@
-// app/api/profile/route.ts
-"use server";
-
-import { z } from "zod";
-import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { User } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
 
-const schemaUserProfile = z.object({
-  age: z.number().optional(),
-  gender: z.string().optional(),
-  height: z.number().optional(),
-  weight: z.number().optional(),
-  targetWeight: z.number().optional(),
-  activityLevel: z.string().optional(),
-});
+export async function GET(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-export async function GET() {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        profile: true,
-      },
+    const profile = await prisma.profile.findUnique({
+      where: { userId },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({
-      profile: user.profile,
-    });
+    return NextResponse.json({ profile });
   } catch (error) {
-    console.error("Profile GET error:", error);
+    console.error("GET /api/profile error:", error);
     return NextResponse.json(
       { error: "Failed to fetch profile" },
       { status: 500 }
@@ -46,46 +24,60 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
+    const auth = await getAuth(req);
+    const { userId } = auth;
+
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const formData = await request.formData();
-    const rawData = {
-      name: formData.get("name"),
-      about: formData.get("about"),
-      socialMediaURL: formData.get("socialMediaURL"),
-      avatarImage: formData.get("avatarImage"),
-    };
+    const body = await req.json();
 
-    const validated = schemaUserProfile.safeParse(rawData);
-    if (!validated.success) {
+    // Validate input types
+    if (
+      typeof body.age !== "number" ||
+      typeof body.height !== "number" ||
+      typeof body.weight !== "number" ||
+      typeof body.targetWeight !== "number" ||
+      !["male", "female"].includes(body.gender) ||
+      !["sedentary", "light", "moderate", "active", "veryActive"].includes(
+        body.activityLevel
+      )
+    ) {
       return NextResponse.json(
-        { error: validated.error.flatten().fieldErrors },
+        { error: "Invalid input. Please check all fields." },
         { status: 400 }
       );
     }
 
-    const avatarImageUrl = (formData.get("avatarImage") as string) ?? "";
+    // Prepare profile data
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const data = {
+      name: user?.firstName || "Anonymous",
+      age: body.age,
+      gender: body.gender,
+      height: body.height,
+      weight: body.weight,
+      targetWeight: body.targetWeight,
+      activityLevel: body.activityLevel,
+      avatarUrl: user?.imageUrl || "",
+    };
 
-    const profile = await prisma.profile.create({
-      data: {
-        userId,
-        ...validated.data,
-      },
+    // Create or update profile
+    const profile = await prisma.profile.upsert({
+      where: { userId },
+      update: data,
+      create: { userId, ...data },
     });
 
-    return NextResponse.json({
-      message: "Profile created successfully",
-      profile,
-    });
+    return NextResponse.json({ profile });
   } catch (error) {
-    console.error("Profile POST error:", error);
+    console.error("POST /api/profile error:", error);
     return NextResponse.json(
-      { error: "Failed to create profile" },
+      { error: "Failed to update profile. Please try again." },
       { status: 500 }
     );
   }

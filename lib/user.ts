@@ -40,13 +40,15 @@ export const createUser = async (formData: FormData) => {
         userId,
         email: validated.data.email,
         password: hashedPassword,
-        name: validated.data.name,
       },
     });
 
     return { message: "User created successfully", user };
   } catch (error: unknown) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return { error: "Email already exists" };
     }
     return { error: "Failed to create user" };
