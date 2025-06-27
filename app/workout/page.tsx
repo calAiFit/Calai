@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 
 interface ActivityLevel {
   [key: string]: number;
