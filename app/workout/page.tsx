@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 
 interface ActivityLevel {
   [key: string]: number;
@@ -86,6 +85,7 @@ export default function WorkoutPage() {
     },
   };
 
+  // Fix: Use selectedCategory to determine MET value, fallback to first if not found
   const calculateCalories = () => {
     if (!weight || !duration || !activityLevel) return;
 
@@ -94,11 +94,28 @@ export default function WorkoutPage() {
     const w = parseFloat(weight);
     const d = parseFloat(duration);
 
-    // Get MET value based on activity level
+    // Try to match selectedCategory to MET key, fallback to first value
     const activityLevels = MET_VALUES[activityLevel as keyof METValues];
-    const met = Object.values(activityLevels)[0];
+    let met: number | undefined;
 
+    // Try to match selectedCategory to MET key
+    if (selectedCategory) {
+      // Remove spaces and make lowercase for matching
+      const normalizedCategory = selectedCategory
+        .replace(/\s/g, "")
+        .toLowerCase();
+      met =
+        Object.entries(activityLevels).find(([key]) =>
+          key.replace(/\s/g, "").toLowerCase().includes(normalizedCategory)
+        )?.[1] ?? undefined;
+    }
+
+    // Fallback to first MET value if not found
     if (typeof met !== "number") {
+      met = Object.values(activityLevels)[0];
+    }
+
+    if (typeof met !== "number" || isNaN(w) || isNaN(d)) {
       setLoading(false);
       return;
     }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { UserButton, SignedIn } from "@clerk/nextjs";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +32,7 @@ export default function Navbar() {
                 d="M13 10V3L4 14h7v7l9-11h-7z"
               />
             </svg>
-            FitMGL
+            NutriCAI{" "}
           </Link>
 
           {/* Desktop Nav */}
@@ -47,6 +48,9 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
 
           {/* Mobile Menu Button */}

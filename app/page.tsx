@@ -7,7 +7,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome to FitMGL
+            Welcome to NutriCAI
           </h1>
           <div className="flex items-center gap-2">
             <svg
@@ -37,7 +37,7 @@ export default function Home() {
           <div className="bg-white rounded-2xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold text-gray-900">
-                About FitMGL
+                About NutriCAI
               </h2>
               <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
                 <svg
