@@ -47,9 +47,11 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Weight (kg)</label>
             <Input
-              type="number"
               value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
+                setWeight(val);
+              }}
               placeholder="Enter weight"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
@@ -57,9 +59,14 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Height (cm)</label>
             <Input
-              type="number"
               value={height}
-              onChange={(e) => setHeight(e.target.value)}
+              onChange={(e) => {
+                let val = e.target.value.replace(/[^0-9]/g, "").slice(0, 3);
+                if (val && val[0] !== "1") {
+                  val = "1";
+                }
+                setHeight(val);
+              }}
               placeholder="Enter height"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
@@ -67,9 +74,14 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Age</label>
             <Input
-              type="number"
               value={age}
-              onChange={(e) => setAge(e.target.value)}
+              onChange={(e) => {
+                let val = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
+                if (val && val[0] !== "1") {
+                  val = "1";
+                }
+                setAge(val);
+              }}
               placeholder="Enter age"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />

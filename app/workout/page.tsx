@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface ActivityLevel {
   [key: string]: number;
@@ -234,15 +235,26 @@ export default function WorkoutPage() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                  <label
+                    className="block text-sm font-medium mb-2 text-gray-700"
+                    style={{
+                      minHeight: "48px",
+                      display: "flex",
+                      alignItems: "center",
+                    }} // Match input height (py-3 ≈ 48px)
+                  >
                     Weight (kg)
                   </label>
-                  <input
-                    type="number"
+                  <Input
                     value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
-                    placeholder="Enter your weight"
+                    onChange={(e) => {
+                      const val = e.target.value
+                        .replace(/[^0-9]/g, "")
+                        .slice(0, 2);
+                      setWeight(val);
+                    }}
+                    placeholder="Enter weight"
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                     kg
@@ -253,10 +265,17 @@ export default function WorkoutPage() {
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Duration (minutes)
                   </label>
-                  <input
-                    type="number"
+                  <Input
                     value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
+                    onChange={(e) => {
+                      let val = e.target.value
+                        .replace(/[^[0-9]/g, "")
+                        .slice(0, 3);
+                      if (val && val[0] !== "1") {
+                        val = "1";
+                      }
+                      setDuration(val);
+                    }}
                     className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                     placeholder="Enter workout duration"
                   />
@@ -266,7 +285,7 @@ export default function WorkoutPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                  <label className="min-h-full block text-sm font-medium mb-2 text-gray-700">
                     Activity Level
                   </label>
                   <select
