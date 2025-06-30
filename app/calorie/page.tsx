@@ -23,7 +23,7 @@ export default function CaloriePage() {
 
     let bmr = 66 + 13.7 * weightNum + 5 * heightNum - 6.8 * ageNum;
 
-    let multiplier = 1.2; // Sedentary
+    let multiplier = 1.2;
     switch (activityLevel) {
       case "light":
         multiplier = 1.375;
@@ -72,6 +72,7 @@ export default function CaloriePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <FoodNutritionAnalyzer />
           <div className="bg-white rounded-2xl shadow-sm">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
@@ -107,9 +108,15 @@ export default function CaloriePage() {
                   </label>
                   <div className="relative">
                     <input
-                      type="number"
                       value={age}
-                      onChange={(e) => setAge(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value
+                          .replace(/[^0-9]/g, "")
+                          .slice(0, 2);
+                        setAge(val);
+                      }}
+                      min={10}
+                      max={99}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                       placeholder="Enter your age"
                     />
@@ -125,7 +132,6 @@ export default function CaloriePage() {
                   </label>
                   <div className="relative">
                     <input
-                      type="number"
                       value={weight}
                       onChange={(e) => setWeight(e.target.value)}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
@@ -143,7 +149,6 @@ export default function CaloriePage() {
                   </label>
                   <div className="relative">
                     <input
-                      type="number"
                       value={height}
                       onChange={(e) => setHeight(e.target.value)}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
@@ -204,8 +209,6 @@ export default function CaloriePage() {
               </form>
             </div>
           </div>
-
-          <FoodNutritionAnalyzer />
         </div>
       </div>
     </div>
