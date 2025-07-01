@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import FoodNutritionAnalyzer from "../components/FoodNutritionAnalyzer";
+import { Input } from "@/components/ui/input";
 
 export default function CaloriePage() {
   const [age, setAge] = useState("");
@@ -117,10 +118,18 @@ export default function CaloriePage() {
                     Age
                   </label>
                   <div className="relative">
-                    <input
-                      type="number"
+                    <Input
                       value={age}
-                      onChange={(e) => setAge(e.target.value)}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        if (!/^\d*$/.test(input)) return;
+                        if (
+                          input.length > 3 ||
+                          (input.length > 0 && input[0] === "0")
+                        )
+                          return;
+                        setAge(input);
+                      }}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                       placeholder="Enter your age"
                     />
@@ -135,10 +144,18 @@ export default function CaloriePage() {
                     Weight
                   </label>
                   <div className="relative">
-                    <input
-                      type="number"
+                    <Input
                       value={weight}
-                      onChange={(e) => setWeight(e.target.value)}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        if (!/^\d*$/.test(input)) return;
+                        if (
+                          input.length > 3 ||
+                          (input.length > 0 && input[0] === "0")
+                        )
+                          return;
+                        setWeight(input);
+                      }}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                       placeholder="Enter your weight"
                     />
@@ -153,10 +170,18 @@ export default function CaloriePage() {
                     Height
                   </label>
                   <div className="relative">
-                    <input
-                      type="number"
+                    <Input
                       value={height}
-                      onChange={(e) => setHeight(e.target.value)}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        if (!/^\d*$/.test(input)) return;
+                        if (
+                          input.length > 3 ||
+                          (input.length > 0 && input[0] === "0")
+                        )
+                          return;
+                        setHeight(input);
+                      }}
                       className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                       placeholder="Enter your height"
                     />

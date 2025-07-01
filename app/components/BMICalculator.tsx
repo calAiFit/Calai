@@ -21,6 +21,7 @@ export default function BMICalculator() {
   const [bmi, setBMI] = useState("");
   const [bmiCategory, setBMICategory] = useState("");
   const [showResults, setShowResults] = useState(false);
+
   const calculateBMI = () => {
     if (!weight || !height) return;
     const w = parseFloat(weight);
@@ -34,6 +35,15 @@ export default function BMICalculator() {
     else if (bmiNumber < 25) setBMICategory("Normal weight");
     else if (bmiNumber < 30) setBMICategory("Overweight");
     else setBMICategory("Obese");
+  };
+
+  // Color class based on BMI category
+  const getColorClass = () => {
+    if (bmiCategory === "Normal weight") return "text-green-500";
+    if (bmiCategory === "Underweight") return "text-gray-500";
+    if (bmiCategory === "Overweight") return "text-yellow-500";
+    if (bmiCategory === "Obese") return "text-red-500";
+    return "text-purple-700";
   };
 
   return (
@@ -50,12 +60,9 @@ export default function BMICalculator() {
               value={weight}
               onChange={(e) => {
                 const input = e.target.value;
-
                 if (!/^\d*$/.test(input)) return;
-
                 if (input.length > 3 || (input.length > 0 && input[0] === "0"))
                   return;
-
                 setWeight(input);
               }}
               placeholder="Enter weight"
@@ -68,12 +75,9 @@ export default function BMICalculator() {
               value={height}
               onChange={(e) => {
                 const input = e.target.value;
-
                 if (!/^\d*$/.test(input)) return;
-
                 if (input.length > 3 || (input.length > 0 && input[0] === "0"))
                   return;
-
                 setHeight(input);
               }}
               placeholder="Enter height"
@@ -86,12 +90,9 @@ export default function BMICalculator() {
               value={age}
               onChange={(e) => {
                 const input = e.target.value;
-
                 if (!/^\d*$/.test(input)) return;
-
                 if (input.length > 3 || (input.length > 0 && input[0] === "0"))
                   return;
-
                 setAge(input);
               }}
               placeholder="Enter age"
@@ -146,7 +147,7 @@ export default function BMICalculator() {
           >
             <Card className="p-6 rounded-xl bg-white border border-gray-200">
               <div className="flex flex-col items-center text-center">
-                <h2 className="text-4xl font-bold text-purple-700 mb-4">
+                <h2 className={`text-4xl font-bold mb-4 ${getColorClass()}`}>
                   {bmi}
                 </h2>
                 <p className="text-xl text-gray-700 mb-6">{bmiCategory}</p>
@@ -162,7 +163,7 @@ export default function BMICalculator() {
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600 w-full">
                   <span>18.5</span>
                   <span>25</span>
                   <span>30</span>
@@ -176,6 +177,12 @@ export default function BMICalculator() {
                 BMI Categories
               </h3>
               <div className="space-y-4">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-gray-300 rounded-full mr-2"></div>
+                  <span className="text-sm text-gray-600">
+                    Underweight (18.5 or less)
+                  </span>
+                </div>
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
                   <span className="text-sm text-gray-600">
