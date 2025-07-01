@@ -31,7 +31,7 @@ export default function Navbar() {
                 d="M13 10V3L4 14h7v7l9-11h-7z"
               />
             </svg>
-            FitMGL
+            NutriCal
           </Link>
 
           {/* Desktop Nav */}

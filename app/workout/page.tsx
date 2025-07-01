@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 interface ActivityLevel {
@@ -219,10 +220,19 @@ export default function WorkoutPage() {
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Weight (kg)
                   </label>
-                  <input
-                    type="number"
+                  <Input
                     value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => {
+                      const input = e.target.value;
+
+                      if (!/^\d*$/.test(input)) return;
+                      if (
+                        input.length > 3 ||
+                        (input.length > 0 && input[0] === "0")
+                      )
+                        return;
+                      setWeight(input);
+                    }}
                     className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                     placeholder="Enter your weight"
                   />
@@ -235,10 +245,21 @@ export default function WorkoutPage() {
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Duration (minutes)
                   </label>
-                  <input
-                    type="number"
+                  <Input
                     value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
+                    onChange={(e) => {
+                      const input = e.target.value;
+
+                      if (!/^\d*$/.test(input)) return;
+
+                      if (
+                        input.length > 3 ||
+                        (input.length > 0 && input[0] === "0")
+                      )
+                        return;
+
+                      setDuration(input);
+                    }}
                     className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
                     placeholder="Enter workout duration"
                   />
@@ -254,7 +275,7 @@ export default function WorkoutPage() {
                   <select
                     value={activityLevel}
                     onChange={(e) => setActivityLevel(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full h-[40] px-4 py-3 text- rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="Light">Light</option>
                     <option value="Moderate">Moderate</option>

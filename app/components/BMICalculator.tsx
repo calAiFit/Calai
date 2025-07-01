@@ -47,9 +47,17 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Weight (kg)</label>
             <Input
-              type="number"
               value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+
+                if (!/^\d*$/.test(input)) return;
+
+                if (input.length > 3 || (input.length > 0 && input[0] === "0"))
+                  return;
+
+                setWeight(input);
+              }}
               placeholder="Enter weight"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
@@ -57,9 +65,17 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Height (cm)</label>
             <Input
-              type="number"
               value={height}
-              onChange={(e) => setHeight(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+
+                if (!/^\d*$/.test(input)) return;
+
+                if (input.length > 3 || (input.length > 0 && input[0] === "0"))
+                  return;
+
+                setHeight(input);
+              }}
               placeholder="Enter height"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
@@ -67,9 +83,17 @@ export default function BMICalculator() {
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Age</label>
             <Input
-              type="number"
               value={age}
-              onChange={(e) => setAge(e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+
+                if (!/^\d*$/.test(input)) return;
+
+                if (input.length > 3 || (input.length > 0 && input[0] === "0"))
+                  return;
+
+                setAge(input);
+              }}
               placeholder="Enter age"
               className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
