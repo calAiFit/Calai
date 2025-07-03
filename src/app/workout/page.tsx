@@ -240,7 +240,6 @@ export default function WorkoutPage() {
                     kg
                   </span>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Duration (minutes)
@@ -267,7 +266,6 @@ export default function WorkoutPage() {
                     min
                   </span>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700">
                     Activity Level
@@ -275,7 +273,7 @@ export default function WorkoutPage() {
                   <select
                     value={activityLevel}
                     onChange={(e) => setActivityLevel(e.target.value)}
-                    className="w-full h-[40] px-4 py-3 text- rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full h-[45px] px-4 py-3 text-sm rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="Light">Light</option>
                     <option value="Moderate">Moderate</option>
@@ -326,7 +324,6 @@ export default function WorkoutPage() {
                   )}
                   Calculate Calories Burned
                 </button>
-
                 {caloriesBurned && (
                   <div className="mt-6 p-4 rounded-xl bg-purple-50 text-purple-700">
                     <div className="flex items-center justify-between">
