@@ -1,0 +1,14 @@
+{
+  "/api/burned-calories/route": "app/api/burned-calories/route.js",
+  "/api/daily-goals/route": "app/api/daily-goals/route.js",
+  "/api/food-recognition/route": "app/api/food-recognition/route.js",
+  "/api/intake-history/route": "app/api/intake-history/route.js",
+  "/api/profile/route": "app/api/profile/route.js",
+  "/api/weight/route": "app/api/weight/route.js",
+  "/api/workouts/route": "app/api/workouts/route.js",
+  "/calorie/page": "app/calorie/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/workout/page": "app/workout/page.js"
+}

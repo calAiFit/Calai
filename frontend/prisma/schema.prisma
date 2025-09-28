@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id             String               @id @default(cuid())
+  userId         String               @unique // Clerk user ID
+  email          String               @unique
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+}
+
+model Profile {
+  id            String         @id @default(cuid())
+  userId        String         @unique // Clerk user ID
+  name          String
+  age           Int?
+  gender        String?
+  height        Float?
+  avatarUrl     String
+  weight        Float?
+  targetWeight  Float?
+  activityLevel String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  weightEntries WeightEntry[]
+}
+
+model DailyGoal {
+  id          String   @id @default(cuid())
+  userId      String   // Clerk user ID
+  date        DateTime
+  calories    Int
+  protein     Int
+  carbs       Int
+  fats        Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@unique([userId, date])
+}
+
+model DailyIntakeHistory {
+  id        String   @id @default(cuid())
+  userId    String   // Clerk user ID
+  date      DateTime
+  foodName  String
+  calories  Int
+  protein   Int
+  carbs     Int
+  fats      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations (commented out to avoid migration issues)
+  // user      User     @relation(fields: [userId], references: [userId])
+}
+
+model DailyBurnedCalories {
+  id          String   @id @default(cuid())
+  userId      String   // Clerk user ID
+  date        DateTime
+  calories    Int
+  activity    String   // Description of activity
+  duration    Int?     // Duration in minutes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@unique([userId, date, activity])
+  
+  // Relations (commented out to avoid migration issues)
+  // user        User     @relation(fields: [userId], references: [userId])
+}
+
+model DailySummary {
+  id              String   @id @default(cuid())
+  userId          String   // Clerk user ID
+  date            DateTime
+  totalConsumed   Int      @default(0)
+  totalBurned     Int      @default(0)
+  netCalories     Int      @default(0)
+  protein         Int      @default(0)
+  carbs           Int      @default(0)
+  fats            Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@unique([userId, date])
+  
+  // Relations (commented out to avoid migration issues)
+  // user            User     @relation(fields: [userId], references: [userId])
+}
+
+model Workout {
+  id        String   @id @default(cuid())
+  date      DateTime
+  duration  Int
+  calories  Int
+  exercises String[]
+  userId    String   // Clerk user ID
+}
+
+model FoodRecognition {
+  id         String   @id @default(cuid())
+  userId     String?  // Clerk user ID
+  imageUrl   String
+  foodName   String
+  confidence Float
+  calories   Int?
+  protein    Int?
+  carbs      Int?
+  fats       Int?
+  createdAt  DateTime @default(now())
+}
+
+model WeightEntry {
+  id        String   @id @default(cuid())
+  weight    Float
+  date      DateTime @default(now())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
