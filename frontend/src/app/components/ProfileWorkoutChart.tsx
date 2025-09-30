@@ -55,8 +55,8 @@ export const ProfileWorkoutChart = ({
     },
   ];
 
-  const formatTooltip = (value: number, name: string, props: any) => {
-    if (props.payload.type === "duration") {
+  const formatTooltip = (value: number, name: string, props: { payload?: { type: string } }) => {
+    if (props.payload?.type === "duration") {
       return [`${value} min`, name];
     }
     return [`${value} cal`, name];
