@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
-import { db } from "@/lib/prisma";
+import { db, prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const weightEntrySchema = z.object({
@@ -68,6 +68,62 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to add weight entry" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const entryId = searchParams.get("id");
+
+    if (!entryId) {
+      return NextResponse.json(
+        { error: "Weight entry ID is required" },
+        { status: 400 }
+      );
+    }
+
+    console.log("DELETE /api/weight - Deleting entry:", entryId);
+
+    // First, verify the weight entry exists and belongs to the user
+    const weightEntry = await prisma.weightEntry.findUnique({
+      where: { id: entryId },
+      include: { profile: true }
+    });
+
+    if (!weightEntry) {
+      return NextResponse.json(
+        { error: "Weight entry not found" },
+        { status: 404 }
+      );
+    }
+
+    if (weightEntry.profile.userId !== userId) {
+      return NextResponse.json(
+        { error: "Unauthorized to delete this entry" },
+        { status: 403 }
+      );
+    }
+
+
+    await prisma.weightEntry.delete({
+      where: { id: entryId }
+    });
+
+    console.log("DELETE /api/weight - Successfully deleted entry:", entryId);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE /api/weight error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete weight entry" },
       { status: 500 }
     );
   }

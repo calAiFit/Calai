@@ -4,13 +4,6 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { motion } from "framer-motion";
 
 export default function BMICalculator() {
@@ -47,11 +40,10 @@ export default function BMICalculator() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
-      <Card className="p-8 rounded-2xl shadow-lg bg-white">
-        <h1 className="text-4xl font-bold text-purple-700 mb-8 text-center">
-          BMI Calculator
-        </h1>
+    <div className="p-8">
+      <h1 className="text-4xl font-bold text-purple-700 mb-8 text-center">
+        BMI Calculator
+      </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="space-y-4">
@@ -101,15 +93,15 @@ export default function BMICalculator() {
           </div>
           <div className="space-y-4">
             <label className="text-sm text-gray-600">Gender</label>
-            <Select value={gender} onValueChange={setGender}>
-              <SelectTrigger className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                <SelectValue placeholder="Select gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-              </SelectContent>
-            </Select>
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white text-gray-900"
+            >
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
         </div>
 
@@ -205,7 +197,6 @@ export default function BMICalculator() {
             </Card>
           </motion.div>
         )}
-      </Card>
     </div>
   );
 }
