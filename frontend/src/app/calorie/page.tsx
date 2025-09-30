@@ -8,6 +8,7 @@ import  FoodNutritionAnalyzer  from "../components/FoodNutritionAnalyzer";
 import AddCalorieIntake from "../components/AddCalorieIntake";
 import EnhancedProgressBar from "../components/EnhancedProgressBar";
 import BurnedCaloriesTracker from "../components/BurnedCaloriesTracker";
+import { GoalCalculator } from "../components/GoalCalculator";
 import { Input } from "@/components/ui/input";
 
 interface DailyGoal {
@@ -47,6 +48,7 @@ export default function CaloriePage() {
   const [intakeHistory, setIntakeHistory] = useState<IntakeRecord[]>([]);
   const [burnedCalories, setBurnedCalories] = useState<BurnedCaloriesRecord[]>([]);
   const [totalBurned, setTotalBurned] = useState(0);
+  const [showGoalCalculator, setShowGoalCalculator] = useState(false);
 
   const loadUserData = useCallback(async () => {
     if (!user) {
@@ -171,6 +173,11 @@ export default function CaloriePage() {
     setLoading(false);
   };
 
+  const handleGoalCalculated = async (goalCalories: number) => {
+    setCalories(goalCalories.toString());
+    await loadUserData();
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -189,25 +196,53 @@ export default function CaloriePage() {
           <h1 className="text-3xl font-bold text-gray-900">
             Daily Calorie Calculator
           </h1>
-          <div className="flex items-center gap-2">
-            <svg
-              className="w-6 h-6 text-purple-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setShowGoalCalculator(!showGoalCalculator)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:opacity-90 transition-all"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-            <span className="text-sm text-gray-600">
-              Calculate your daily needs
-            </span>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+              {showGoalCalculator ? "Hide Goal Calculator" : "Show Goal Calculator"}
+            </button>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-6 h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span className="text-sm text-gray-600">
+                Calculate your daily needs
+              </span>
+            </div>
           </div>
         </div>
+
+
+        {showGoalCalculator && (
+          <div className="mb-8">
+            <GoalCalculator onGoalCalculated={handleGoalCalculated} />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">

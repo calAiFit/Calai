@@ -108,9 +108,7 @@ export default function ProfileDisplay({ profile }: ProfileDisplayProps) {
       )}
 
       {/* Weight Logger */}
-      {profile?.id && (
-        <WeightLogger profileId={profile.id} />
-      )}
+      <WeightLogger />
     </div>
   );
 }

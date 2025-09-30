@@ -23,7 +23,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors"
+            className="flex items-center gap-2 text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors cursor-pointer "
           >
             <svg
               className="w-6 h-6"
@@ -49,7 +49,7 @@ export default function Navbar() {
                 href={`/${
                   label.toLowerCase() === "home" ? "" : label.toLowerCase()
                 }`}
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className="text-gray-700 hover:text-purple-600 transition-colors font-medium cursor-pointer"
               >
                 {label}
               </Link>
@@ -63,7 +63,7 @@ export default function Navbar() {
                     Welcome, {user?.firstName || user?.emailAddresses[0]?.emailAddress}
                   </span>
                   <SignOutButton>
-                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors">
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors cursor-pointer">
                       Sign Out
                     </button>
                   </SignOutButton>
@@ -71,13 +71,13 @@ export default function Navbar() {
               ) : (
                 <div className="flex items-center space-x-2">
                   <SignInButton mode="modal">
-                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-md text-sm transition-colors">
+                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-md text-sm transition-colors cursor-pointer">
                       Sign In
                     </button>
                   </SignInButton>
                   <Link
                     href="/sign-up"
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded-md text-sm transition-colors cursor-pointer"
                   >
                     Sign Up
                   </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
-            className="md:hidden p-2 rounded-md hover:bg-gray-100 transition"
+            className="md:hidden p-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
           >
             <svg
               className="w-6 h-6"
@@ -135,7 +135,7 @@ export default function Navbar() {
                     href={`/${
                       label.toLowerCase() === "home" ? "" : label.toLowerCase()
                     }`}
-                    className="block px-4 py-2 rounded-md text-gray-700 hover:text-purple-600 hover:bg-gray-50 transition-colors font-medium"
+                    className="block px-4 py-2 rounded-md text-gray-700 hover:text-purple-600 hover:bg-gray-50 transition-colors font-medium cursor-pointer"
                     onClick={() => setIsOpen(false)}
                   >
                     {label}
@@ -150,7 +150,7 @@ export default function Navbar() {
                         Welcome, {user?.firstName || user?.emailAddresses[0]?.emailAddress}
                       </div>
                       <SignOutButton>
-                        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm transition-colors">
+                        <button className="w-full bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm transition-colors cursor-pointer">
                           Sign Out
                         </button>
                       </SignOutButton>
@@ -158,13 +158,13 @@ export default function Navbar() {
                   ) : (
                     <div className="space-y-2">
                       <SignInButton mode="modal">
-                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-md text-sm transition-colors">
+                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-md text-sm transition-colors cursor-pointer">
                           Sign In
                         </button>
                       </SignInButton>
                       <Link
                         href="/sign-up"
-                        className="block w-full bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm transition-colors text-center"
+                        className="block w-full bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm transition-colors text-center cursor-pointer"
                         onClick={() => setIsOpen(false)}
                       >
                         Sign Up

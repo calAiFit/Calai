@@ -24,7 +24,7 @@ interface EditableNutritionData extends NutritionData {
   isEditing?: boolean;
 }
 
-// Use environment variables for API keys
+
 const HF_TOKEN = process.env.NEXT_PUBLIC_HF_TOKEN || "";
 const NUTRITIONIX_APP_ID = process.env.NEXT_PUBLIC_NUTRITIONIX_APP_ID || "";
 const NUTRITIONIX_APP_KEY = process.env.NEXT_PUBLIC_NUTRITIONIX_APP_KEY || "";
