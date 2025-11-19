@@ -106,7 +106,7 @@ export default function Dashboard() {
                 Welcome back, {profile?.name || user?.firstName || "User"}!
               </h1>
               <p className="text-gray-600 mt-1">
-                Here's your fitness dashboard for today
+                Here&apos;s your fitness dashboard for today
               </p>
             </div>
             <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-lg">
