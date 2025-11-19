@@ -122,6 +122,17 @@
   }
 }
 
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --indigo-300: #a5b4fc;
+  --violet-200: #ddd6fe;
+}
+
 @keyframes aurora {
   from {
     background-position: 50% 50%, 50% 50%;
@@ -129,4 +140,17 @@
   to {
     background-position: 350% 50%, 350% 50%;
   }
+}
+
+/* Animation delays for staggered bouncing effect */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
 }
