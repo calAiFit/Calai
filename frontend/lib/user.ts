@@ -1,7 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import crypto from "crypto";
 
 const prisma = new PrismaClient();
@@ -38,9 +39,9 @@ export const createUser = async (formData: FormData) => {
     });
 
     return { message: "User created successfully", user };
-  } catch (error: unknown) {  
+  } catch (error: unknown) {
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error instanceof PrismaClientKnownRequestError &&
       error.code === "P2002"
     ) {
       return { error: "Email already exists" };

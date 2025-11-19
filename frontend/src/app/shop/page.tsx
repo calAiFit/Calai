@@ -79,6 +79,7 @@ export default function ShopPage() {
               className="bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md"
             >
               <div className="relative h-64">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={product.image}
                   alt={product.name}

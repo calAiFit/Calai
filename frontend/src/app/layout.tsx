@@ -3,7 +3,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
-import Navbar from "./components/Navbar";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { FitnessAppSidebar } from "@/components/fitness-sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 // Replace with your Clerk publishable key
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "";
@@ -33,8 +39,38 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Navbar />
-          {children}
+          <ThemeProvider defaultTheme="system">
+            <SidebarProvider>
+              <FitnessAppSidebar />
+              <SidebarInset>
+                <header className="flex h-16 shrink-0 items-center gap-2 px-4 border-b bg-white/90 dark:bg-gray-900/90 backdrop-blur-md sticky top-0 z-40">
+                  <SidebarTrigger className="-ml-1" />
+                  <div className="h-4 w-px bg-sidebar-border" />
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-6 h-6 bg-purple-600 rounded">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    </div>
+                    <h1 className="text-lg font-semibold text-purple-600">
+                      NutriCal Dashboard
+                    </h1>
+                  </div>
+                </header>
+                <main className="flex flex-1 flex-col">{children}</main>
+              </SidebarInset>
+            </SidebarProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
