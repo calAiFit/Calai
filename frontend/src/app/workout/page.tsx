@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
+import AIWorkoutRecommendations from "../components/AIWorkoutRecommendations";
 
 interface WorkoutRecord {
   duration: number;
@@ -171,14 +172,13 @@ export default function WorkoutPage() {
         calories: parseFloat(caloriesBurned),
         exercises: exerciseNames,
       });
-      
+
       await loadUserData(); // Reload workout history
-      
+
       // Clear the form after successful save
       setWeight("");
       setDuration("");
       setCaloriesBurned("");
-      
     } catch (error) {
       console.error("Error saving workout:", error);
     } finally {
@@ -477,16 +477,20 @@ export default function WorkoutPage() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">
               Recent Workouts
             </h2>
-            
+
             <div className="space-y-4">
               {workouts.map((workout, index) => (
-                <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  key={index}
+                  className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                >
                   <div>
                     <div className="font-medium text-gray-900">
                       {workout.exercises.join(", ")}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {workout.duration} minutes • {workout.calories} calories burned
+                      {workout.duration} minutes • {workout.calories} calories
+                      burned
                     </div>
                   </div>
                   <div className="text-sm text-gray-500">
@@ -495,6 +499,13 @@ export default function WorkoutPage() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* AI Workout Recommendations */}
+        {user && (
+          <div className="mt-8">
+            <AIWorkoutRecommendations />
           </div>
         )}
       </div>

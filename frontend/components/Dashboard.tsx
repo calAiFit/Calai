@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import BMICalculator from "../src/app/components/BMICalculator";
+import AIInsightsDashboard from "../src/app/components/AIInsightsDashboard";
 import api from "../src/app/lib/api";
 import Link from "next/link";
 import {
@@ -13,6 +14,8 @@ import {
   Activity,
   Award,
   ArrowRight,
+  Sparkles,
+  Brain,
 } from "lucide-react";
 
 interface Profile {
@@ -344,6 +347,22 @@ export default function Dashboard() {
             </motion.div>
           </div>
         </div>
+
+        {/* AI Insights Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-8"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="w-5 h-5 text-purple-600" />
+            <h2 className="text-xl font-semibold text-gray-900">
+              AI-Powered Insights
+            </h2>
+          </div>
+          <AIInsightsDashboard />
+        </motion.div>
       </div>
     </div>
   );

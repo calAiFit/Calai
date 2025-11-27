@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import api from "../lib/api";
 
-import  FoodNutritionAnalyzer  from "../components/FoodNutritionAnalyzer";
+import FoodNutritionAnalyzer from "../components/FoodNutritionAnalyzer";
 import AddCalorieIntake from "../components/AddCalorieIntake";
 import EnhancedProgressBar from "../components/EnhancedProgressBar";
 import BurnedCaloriesTracker from "../components/BurnedCaloriesTracker";
 import { GoalCalculator } from "../components/GoalCalculator";
+import AIMealPlanner from "../components/AIMealPlanner";
 import { Input } from "@/components/ui/input";
 
 interface DailyGoal {
@@ -35,7 +36,6 @@ interface BurnedCaloriesRecord {
   createdAt: string;
 }
 
-
 export default function CaloriePage() {
   const { user, isLoaded } = useUser();
   const [age, setAge] = useState("");
@@ -46,7 +46,9 @@ export default function CaloriePage() {
   const [loading, setLoading] = useState(false);
   const [dailyGoal, setDailyGoal] = useState<DailyGoal | null>(null);
   const [intakeHistory, setIntakeHistory] = useState<IntakeRecord[]>([]);
-  const [burnedCalories, setBurnedCalories] = useState<BurnedCaloriesRecord[]>([]);
+  const [burnedCalories, setBurnedCalories] = useState<BurnedCaloriesRecord[]>(
+    []
+  );
   const [totalBurned, setTotalBurned] = useState(0);
   const [showGoalCalculator, setShowGoalCalculator] = useState(false);
 
@@ -87,12 +89,9 @@ export default function CaloriePage() {
       if (burnedRes.data.totalBurned !== undefined) {
         setTotalBurned(burnedRes.data.totalBurned);
       }
-
-
     } catch (error: unknown) {
       const errorObj = error as { response?: { status: number } };
       if (errorObj.response?.status === 401) {
-
         console.log("User not authenticated, clearing data");
         setDailyGoal(null);
         setIntakeHistory([]);
@@ -100,7 +99,7 @@ export default function CaloriePage() {
         setTotalBurned(0);
         return;
       }
-      
+
       console.error("Error loading user data:", error);
 
       setDailyGoal(null);
@@ -137,7 +136,7 @@ export default function CaloriePage() {
 
     const bmr = 66 + 13.7 * weightNum + 5 * heightNum - 6.8 * ageNum;
 
-    let multiplier = 1.2; 
+    let multiplier = 1.2;
     switch (activityLevel) {
       case "light":
         multiplier = 1.375;
@@ -160,11 +159,11 @@ export default function CaloriePage() {
       try {
         await api.post("/daily-goals", {
           calories: totalCalories,
-          protein: Math.round(totalCalories * 0.3 / 4), 
-          carbs: Math.round(totalCalories * 0.45 / 4), 
-          fats: Math.round(totalCalories * 0.25 / 9), 
+          protein: Math.round((totalCalories * 0.3) / 4),
+          carbs: Math.round((totalCalories * 0.45) / 4),
+          fats: Math.round((totalCalories * 0.25) / 9),
         });
-        await loadUserData(); 
+        await loadUserData();
       } catch (error) {
         console.error("Error saving daily goals:", error);
       }
@@ -214,7 +213,9 @@ export default function CaloriePage() {
                   d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                 />
               </svg>
-              {showGoalCalculator ? "Hide Goal Calculator" : "Show Goal Calculator"}
+              {showGoalCalculator
+                ? "Hide Goal Calculator"
+                : "Show Goal Calculator"}
             </button>
             <div className="flex items-center gap-2">
               <svg
@@ -236,7 +237,6 @@ export default function CaloriePage() {
             </div>
           </div>
         </div>
-
 
         {showGoalCalculator && (
           <div className="mb-8">
@@ -270,136 +270,136 @@ export default function CaloriePage() {
                 </div>
 
                 <p className="text-gray-600 mb-8">
-                  Calculate your daily calorie needs based on your activity level
-                  and goals.
+                  Calculate your daily calorie needs based on your activity
+                  level and goals.
                 </p>
 
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Age
-                  </label>
-                  <div className="relative">
-                    <Input
-                      value={age}
-                      onChange={(e) => {
-                        const input = e.target.value;
-                        if (!/^\d*$/.test(input)) return;
-                        if (
-                          input.length > 3 ||
-                          (input.length > 0 && input[0] === "0")
-                        )
-                          return;
-                        setAge(input);
-                      }}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
-                      placeholder="Enter your age"
-                    />
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                      years
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Weight
-                  </label>
-                  <div className="relative">
-                    <Input
-                      value={weight}
-                      onChange={(e) => {
-                        const input = e.target.value;
-                        if (!/^\d*$/.test(input)) return;
-                        if (
-                          input.length > 3 ||
-                          (input.length > 0 && input[0] === "0")
-                        )
-                          return;
-                        setWeight(input);
-                      }}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
-                      placeholder="Enter your weight"
-                    />
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                      kg
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Height
-                  </label>
-                  <div className="relative">
-                    <Input
-                      value={height}
-                      onChange={(e) => {
-                        const input = e.target.value;
-                        if (!/^\d*$/.test(input)) return;
-                        if (
-                          input.length > 3 ||
-                          (input.length > 0 && input[0] === "0")
-                        )
-                          return;
-                        setHeight(input);
-                      }}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
-                      placeholder="Enter your height"
-                    />
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                      cm
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Activity Level
-                  </label>
-                  <select
-                    value={activityLevel}
-                    onChange={(e) => setActivityLevel(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  >
-                    <option value="sedentary">
-                      Sedentary (little or no exercise)
-                    </option>
-                    <option value="light">
-                      Light exercise (1-3 days/week)
-                    </option>
-                    <option value="moderate">
-                      Moderate exercise (3-5 days/week)
-                    </option>
-                    <option value="active">
-                      Heavy exercise (6-7 days/week)
-                    </option>
-                    <option value="very-active">
-                      Very heavy exercise (twice/day)
-                    </option>
-                  </select>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={calculateCalories}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={loading}
-                >
-                  {loading ? "Calculating..." : "Calculate Calories"}
-                </button>
-
-                {calories && (
-                  <div className="mt-6 p-4 bg-purple-50 rounded-xl">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Your Daily Calorie Needs
-                    </h3>
-                    <div className="text-2xl font-bold text-purple-600">
-                      {calories} kcal/day
+                <form className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Age
+                    </label>
+                    <div className="relative">
+                      <Input
+                        value={age}
+                        onChange={(e) => {
+                          const input = e.target.value;
+                          if (!/^\d*$/.test(input)) return;
+                          if (
+                            input.length > 3 ||
+                            (input.length > 0 && input[0] === "0")
+                          )
+                            return;
+                          setAge(input);
+                        }}
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
+                        placeholder="Enter your age"
+                      />
+                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        years
+                      </span>
                     </div>
                   </div>
-                )}
-              </form>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Weight
+                    </label>
+                    <div className="relative">
+                      <Input
+                        value={weight}
+                        onChange={(e) => {
+                          const input = e.target.value;
+                          if (!/^\d*$/.test(input)) return;
+                          if (
+                            input.length > 3 ||
+                            (input.length > 0 && input[0] === "0")
+                          )
+                            return;
+                          setWeight(input);
+                        }}
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
+                        placeholder="Enter your weight"
+                      />
+                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        kg
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Height
+                    </label>
+                    <div className="relative">
+                      <Input
+                        value={height}
+                        onChange={(e) => {
+                          const input = e.target.value;
+                          if (!/^\d*$/.test(input)) return;
+                          if (
+                            input.length > 3 ||
+                            (input.length > 0 && input[0] === "0")
+                          )
+                            return;
+                          setHeight(input);
+                        }}
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10"
+                        placeholder="Enter your height"
+                      />
+                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        cm
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Activity Level
+                    </label>
+                    <select
+                      value={activityLevel}
+                      onChange={(e) => setActivityLevel(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    >
+                      <option value="sedentary">
+                        Sedentary (little or no exercise)
+                      </option>
+                      <option value="light">
+                        Light exercise (1-3 days/week)
+                      </option>
+                      <option value="moderate">
+                        Moderate exercise (3-5 days/week)
+                      </option>
+                      <option value="active">
+                        Heavy exercise (6-7 days/week)
+                      </option>
+                      <option value="very-active">
+                        Very heavy exercise (twice/day)
+                      </option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={calculateCalories}
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading}
+                  >
+                    {loading ? "Calculating..." : "Calculate Calories"}
+                  </button>
+
+                  {calories && (
+                    <div className="mt-6 p-4 bg-purple-50 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Your Daily Calorie Needs
+                      </h3>
+                      <div className="text-2xl font-bold text-purple-600">
+                        {calories} kcal/day
+                      </div>
+                    </div>
+                  )}
+                </form>
               </div>
             </div>
           </div>
@@ -408,9 +408,11 @@ export default function CaloriePage() {
             <AddCalorieIntake onIntakeAdded={loadUserData} />
             <FoodNutritionAnalyzer onIntakeAdded={loadUserData} />
             <BurnedCaloriesTracker onCaloriesAdded={loadUserData} />
+
+            {/* AI Meal Planner */}
+            {user && <AIMealPlanner />}
           </div>
         </div>
-
 
         {user && (dailyGoal || intakeHistory.length > 0 || totalBurned > 0) && (
           <div className="mt-8 bg-white rounded-2xl shadow-sm p-6">
@@ -437,11 +439,14 @@ export default function CaloriePage() {
                 )}
               </div>
             </div>
-            
+
             {dailyGoal && (
               <div className="space-y-6 mb-6">
                 <EnhancedProgressBar
-                  current={intakeHistory.reduce((sum, item) => sum + item.calories, 0)}
+                  current={intakeHistory.reduce(
+                    (sum, item) => sum + item.calories,
+                    0
+                  )}
                   goal={dailyGoal.calories}
                   label="Calories"
                   color="bg-gradient-to-r from-purple-500 to-purple-600"
@@ -450,21 +455,30 @@ export default function CaloriePage() {
                   isNetCalories={true}
                 />
                 <EnhancedProgressBar
-                  current={intakeHistory.reduce((sum, item) => sum + item.protein, 0)}
+                  current={intakeHistory.reduce(
+                    (sum, item) => sum + item.protein,
+                    0
+                  )}
                   goal={dailyGoal.protein}
                   label="Protein"
                   color="bg-gradient-to-r from-blue-500 to-blue-600"
                   unit="g"
                 />
                 <EnhancedProgressBar
-                  current={intakeHistory.reduce((sum, item) => sum + item.carbs, 0)}
+                  current={intakeHistory.reduce(
+                    (sum, item) => sum + item.carbs,
+                    0
+                  )}
                   goal={dailyGoal.carbs}
                   label="Carbs"
                   color="bg-gradient-to-r from-green-500 to-green-600"
                   unit="g"
                 />
                 <EnhancedProgressBar
-                  current={intakeHistory.reduce((sum, item) => sum + item.fats, 0)}
+                  current={intakeHistory.reduce(
+                    (sum, item) => sum + item.fats,
+                    0
+                  )}
                   goal={dailyGoal.fats}
                   label="Fats"
                   color="bg-gradient-to-r from-orange-500 to-orange-600"
@@ -477,14 +491,22 @@ export default function CaloriePage() {
               {/* Food Intake */}
               {intakeHistory.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Today&apos;s Food Intake</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Today&apos;s Food Intake
+                  </h3>
                   <div className="space-y-2">
                     {intakeHistory.map((item, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                      >
                         <div>
-                          <div className="font-medium text-gray-900">{item.foodName}</div>
+                          <div className="font-medium text-gray-900">
+                            {item.foodName}
+                          </div>
                           <div className="text-sm text-gray-600">
-                            {item.calories} cal • {item.protein}g protein • {item.carbs}g carbs • {item.fats}g fats
+                            {item.calories} cal • {item.protein}g protein •{" "}
+                            {item.carbs}g carbs • {item.fats}g fats
                           </div>
                         </div>
                         <div className="text-sm text-gray-500">
@@ -499,12 +521,19 @@ export default function CaloriePage() {
               {/* Burned Calories */}
               {burnedCalories.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Today&apos;s Activities</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Today&apos;s Activities
+                  </h3>
                   <div className="space-y-2">
                     {burnedCalories.map((activity, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex justify-between items-center p-3 bg-orange-50 rounded-lg"
+                      >
                         <div>
-                          <div className="font-medium text-gray-900">{activity.activity}</div>
+                          <div className="font-medium text-gray-900">
+                            {activity.activity}
+                          </div>
                           {activity.duration && (
                             <div className="text-sm text-gray-600">
                               {activity.duration} minutes
